@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://TON-BACKEND-EN-PRODUCTION.com/api',
-  socketUrl: 'https://TON-BACKEND-EN-PRODUCTION.com',
+  apiUrl: 'https://plateforme-placement-l3.onrender.com/api',
+  socketUrl: 'https://plateforme-placement-l3.onrender.com',
 };
