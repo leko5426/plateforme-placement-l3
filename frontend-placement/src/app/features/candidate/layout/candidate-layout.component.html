@@ -1,0 +1,51 @@
+<div class="espace-layout">
+  <aside class="espace-sidebar">
+    <div class="espace-sidebar-header">
+      <span class="badge-statut badge-statut--neutre"><i class="bi bi-person-heart"></i> Espace Candidate</span>
+      <p class="mb-0 mt-2 fw-semibold">{{ auth.utilisateur()?.nom }}</p>
+    </div>
+    <nav class="nav flex-column espace-nav">
+      @for (l of liens; track l.lien) {
+        <a class="nav-link" [routerLink]="l.lien" routerLinkActive="active">
+          <i class="bi" [class]="l.icone"></i> {{ l.libelle }}
+        </a>
+      }
+    </nav>
+  </aside>
+
+  <div class="espace-contenu p-4">
+    <!-- BANDEAU SOFT LOCK : Visible uniquement si le compte n'est pas vérifié -->
+    @if (auth.utilisateur() && !auth.utilisateur()?.emailVerifie) {
+      <div class="alert alert-warning d-flex flex-column align-items-center justify-content-center text-center mb-4 shadow-sm" style="border-left: 5px solid #ffc107;">
+        <h4 class="alert-heading fw-bold mb-2">
+          <i class="bi bi-shield-lock-fill text-warning me-2"></i> Activation de profil requise
+        </h4>
+        <p class="mb-3">
+          Votre profil est actuellement <strong>invisible</strong> pour les agences. <br>
+          Veuillez entrer le code à 4 chiffres reçu par e-mail. <br>
+          <small class="text-muted">(Sans validation, ce compte sera automatiquement supprimé dans 7 jours)</small>
+        </p>
+        
+        <div class="d-flex gap-2">
+          <input 
+            type="text" 
+            maxlength="4" 
+            class="form-control text-center fw-bold fs-4" 
+            style="width: 120px; letter-spacing: 10px;" 
+            [(ngModel)]="codeVerification" 
+            placeholder="----">
+            
+          <button 
+            class="btn btn-warning fw-bold px-4" 
+            (click)="validerLeCode()" 
+            [disabled]="codeVerification.length !== 4 || enCoursDeVerification()">
+            {{ enCoursDeVerification() ? 'Vérification...' : 'Valider mon code' }}
+          </button>
+        </div>
+      </div>
+    }
+
+    <!-- LE CONTENU DES SOUS-PAGES (Profil, Messages, etc.) -->
+    <router-outlet />
+  </div>
+</div>

@@ -1,0 +1,139 @@
+<section class="auth-section">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-9 col-lg-8">
+        <div class="card auth-card">
+          <div class="card-body p-4 p-md-5">
+            <div class="text-center mb-4">
+              <span class="brand-mark-lg"><i class="bi bi-person-heart"></i></span>
+              <h3 class="mt-3 mb-0">Créer mon profil candidate</h3>
+              <p class="text-muted">
+                @if (agentSlug) {
+                  Inscription via l'agence "{{ agentSlug }}"
+                } @else {
+                  Ou choisis une agence depuis la liste des agences partenaires
+                }
+              </p>
+            </div>
+
+            <form #f="ngForm" (ngSubmit)="soumettre(f)">
+              <div class="text-center mb-4">
+                <label for="photo" class="cursor-pointer">
+                  @if (apercuPhoto()) {
+                    <img [src]="apercuPhoto()" class="avatar avatar--lg" alt="Aperçu" />
+                  } @else {
+                    <div class="avatar avatar--lg d-flex align-items-center justify-content-center mx-auto">
+                      <i class="bi bi-camera text-teal fs-4"></i>
+                    </div>
+                  }
+                  <p class="small text-muted mt-2 mb-0">Ajouter une photo (optionnel)</p>
+                </label>
+                <input type="file" id="photo" accept="image/*" class="d-none" (change)="surChangementPhoto($event)" />
+              </div>
+
+              <h6 class="mb-3">Vos informations</h6>
+              <div class="row g-3 mb-4">
+                <div class="col-md-6">
+                  <label class="form-label">Nom complet *</label>
+                  <input type="text" class="form-control" name="nom" required [(ngModel)]="modele.nom" />
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Téléphone</label>
+                  <input type="tel" class="form-control" name="telephone" [(ngModel)]="modele.telephone" />
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Email *</label>
+                  <input type="email" class="form-control" name="email" required [(ngModel)]="modele.email" />
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Mot de passe *</label>
+                  <input type="password" class="form-control" name="password" required minlength="6" [(ngModel)]="modele.password" />
+                </div>
+              </div>
+
+              <h6 class="mb-3">Votre profil</h6>
+              <div class="row g-3">
+                <div class="col-md-4">
+                  <label class="form-label">Ville *</label>
+                  <input type="text" class="form-control" name="ville" required [(ngModel)]="modele.ville" />
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Âge *</label>
+                  <input type="number" class="form-control" name="age" required min="18" max="70" [(ngModel)]="modele.age" />
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Expérience (années)</label>
+                  <input type="number" class="form-control" name="experienceAnnees" min="0" [(ngModel)]="modele.experienceAnnees" />
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Disponibilité</label>
+                  <select class="form-select" name="disponibilite" [(ngModel)]="modele.disponibilite">
+                    <option value="temps_plein">Temps plein</option>
+                    <option value="temps_partiel">Temps partiel</option>
+                    <option value="ponctuel">Ponctuel</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Compétences (séparées par virgule)</label>
+                  <input type="text" class="form-control" name="competencesTexte" placeholder="ex: cuisine, repassage, garde d'enfants" [(ngModel)]="modele.competencesTexte" />
+                </div>
+                <div class="col-12">
+                  <label class="form-label">Parlez un peu de vous</label>
+                  <textarea class="form-control" name="description" rows="3" [(ngModel)]="modele.description"></textarea>
+                </div>
+              </div>
+                            <h6 class="mt-4 mb-3">Pièce d'identité</h6>
+              <div class="mb-3">
+                <label class="form-label">Pièce d'identité (CNI, passeport…) *</label>
+                <input
+                  type="file"
+                  class="form-control"
+                  accept=".jpg,.jpeg,.png,.webp,.pdf,image/jpeg,image/png,image/webp,application/pdf"
+                  (change)="surChangementIdentite($event)"
+                />
+                <div class="form-text">
+                  JPG, PNG, WEBP ou PDF, 5 Mo maximum. Ce document n'est jamais public : seuls
+                  l'administration et, si tu en as choisi un, ton agent de placement peuvent le consulter.
+                </div>
+                @if (erreurIdentite()) {
+                  <div class="text-danger small mt-1">{{ erreurIdentite() }}</div>
+                }
+                @if (nomFichierIdentite() && !erreurIdentite()) {
+                  <div class="small text-success mt-1">
+                    <i class="bi bi-check-circle-fill me-1"></i>{{ nomFichierIdentite() }}
+                  </div>
+                }
+              </div>
+
+              <div class="form-check mb-2">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="consentement"
+                  name="consentement"
+                  required
+                  [(ngModel)]="consentement"
+                />
+                <label class="form-check-label small" for="consentement">
+                  J'accepte que ma pièce d'identité soit utilisée pour vérifier mon profil et consultée
+                  par l'administration et mon agent de placement.
+                </label>
+              </div>
+
+              <button type="submit" class="btn btn-primary w-100 mt-4" [disabled]="enEnvoi()">
+                @if (enEnvoi()) {
+                  <span class="spinner-border spinner-border-sm me-2"></span>
+                }
+                Créer mon profil
+              </button>
+            </form>
+
+            <p class="text-center text-muted small mt-4 mb-0">
+              Déjà inscrite ? <a routerLink="/connexion">Se connecter</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,109 @@
+.chat-layout {
+  display: flex;
+  height: calc(100vh - 280px);
+  min-height: 480px;
+  background: var(--brand-white);
+  border: 1px solid var(--brand-sand-dark);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.chat-liste {
+  width: 280px;
+  flex-shrink: 0;
+  border-right: 1px solid var(--brand-sand-dark);
+  overflow-y: auto;
+}
+.chat-liste-header {
+  padding: 1rem;
+  border-bottom: 1px solid var(--brand-sand-dark);
+}
+
+.chat-item {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  width: 100%;
+  border: none;
+  background: transparent;
+  padding: 0.85rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--brand-sand-dark);
+}
+.chat-item:hover { background: var(--brand-teal-50); }
+.chat-item.active { background: var(--brand-teal-100); }
+
+.avatar-mini-chat {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--brand-teal-700);
+  color: var(--brand-white);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.chat-item-texte {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.chat-item-nom { font-weight: 600; font-size: 0.92rem; }
+.chat-item-dernier {
+  font-size: 0.8rem;
+  color: var(--brand-ink-soft);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chat-fil {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.chat-fil-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 1rem;
+  border-bottom: 1px solid var(--brand-sand-dark);
+}
+
+.chat-fil-messages {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.chat-bulle-ligne { display: flex; }
+.chat-bulle-ligne--moi { justify-content: flex-end; }
+
+.chat-bulle {
+  max-width: 70%;
+  background: var(--brand-teal-50);
+  padding: 0.6rem 0.9rem;
+  border-radius: 14px 14px 14px 2px;
+  font-size: 0.92rem;
+}
+.chat-bulle--moi {
+  background: var(--brand-teal-700);
+  color: var(--brand-white);
+  border-radius: 14px 14px 2px 14px;
+}
+
+.chat-fil-saisie {
+  display: flex;
+  gap: 0.6rem;
+  padding: 1rem;
+  border-top: 1px solid var(--brand-sand-dark);
+}

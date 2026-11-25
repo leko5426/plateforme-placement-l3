@@ -1,0 +1,109 @@
+@if (chargement()) {
+  <app-loading-spinner message="Chargement de vos statistiques…" />
+} @else {
+  @if (dashboard(); as d) {
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+      <div>
+        <h3 class="mb-1">Tableau de bord</h3>
+        <p class="text-muted mb-0">Vue d'ensemble de votre activité</p>
+      </div>
+
+      @if (d.statutValidation !== 'valide') {
+        <span class="badge-statut badge-statut--attente">
+          <i class="bi bi-hourglass-split"></i>
+          Compte en attente de validation
+        </span>
+      }
+    </div>
+
+    <div class="row g-3 mb-4">
+      <div class="col-sm-6 col-lg-3">
+        <app-stat-card
+          icon="bi-people"
+          [valeur]="d.nombreCandidates"
+          label="Candidates au total"
+        />
+      </div>
+
+      <div class="col-sm-6 col-lg-3">
+        <app-stat-card
+          icon="bi-eye"
+          [valeur]="d.vuesFiche"
+          label="Vues de la fiche agence"
+        />
+      </div>
+
+      <div class="col-sm-6 col-lg-3">
+        <app-stat-card
+          icon="bi-inbox"
+          [valeur]="d.nombreCandidaturesEnAttente"
+          label="Candidatures en attente"
+        />
+      </div>
+
+      <div class="col-sm-6 col-lg-3">
+        <app-stat-card
+          icon="bi-patch-check"
+          [valeur]="totalParStatut('verifiee')"
+          label="Profils vérifiés"
+        />
+      </div>
+    </div>
+
+    <div class="row g-3">
+      <div class="col-lg-8">
+        <div class="card">
+          <div class="card-body p-4">
+            <h6 class="mb-3">
+              Répartition de vos candidates par statut
+            </h6>
+
+            <div class="d-flex flex-wrap gap-2">
+              <span class="badge-statut badge-statut--attente">
+                En attente : {{ totalParStatut('en_attente') }}
+              </span>
+
+              <span class="badge-statut badge-statut--succes">
+                Vérifiées : {{ totalParStatut('verifiee') }}
+              </span>
+
+              <span class="badge-statut badge-statut--succes">
+                Placées : {{ totalParStatut('placee') }}
+              </span>
+
+              <span class="badge-statut badge-statut--neutre">
+                Archivées : {{ totalParStatut('archivee') }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4">
+        <div class="card card--accent-top h-100">
+          <div class="card-body p-4">
+            <h6>Actions rapides</h6>
+
+            <div class="d-grid gap-2 mt-3">
+              <a
+                routerLink="/agent/candidates/nouvelle"
+                class="btn btn-primary btn-sm"
+              >
+                <i class="bi bi-person-plus me-1"></i>
+                Ajouter une candidate
+              </a>
+
+              <a
+                routerLink="/agent/profil"
+                class="btn btn-outline-primary btn-sm"
+              >
+                <i class="bi bi-pencil me-1"></i>
+                Modifier ma fiche
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+}

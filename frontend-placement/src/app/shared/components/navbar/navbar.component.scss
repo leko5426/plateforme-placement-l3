@@ -1,0 +1,51 @@
+.app-navbar {
+  background: var(--brand-white);
+  border-bottom: 1px solid var(--brand-sand-dark);
+  padding-block: 0.85rem;
+}
+
+.brand-mark {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: var(--brand-teal-700);
+  color: var(--brand-white);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+}
+
+.brand-name {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.25rem;
+  color: var(--brand-ink);
+}
+
+.text-accent {
+  color: var(--brand-amber-600);
+}
+
+.nav-link {
+  font-weight: 600;
+  color: var(--brand-ink-soft);
+}
+.nav-link.active,
+.nav-link:hover {
+  color: var(--brand-teal-700);
+}
+
+.avatar-mini {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--brand-teal-100);
+  color: var(--brand-teal-700);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}

@@ -1,0 +1,57 @@
+<div class="container py-5">
+  <div class="row mb-4 align-items-center">
+    <div class="col-md-8">
+      <h2 class="mb-1">Mon Espace de Suivi</h2>
+      <p class="text-muted">Historique et statut de vos demandes d'aide-ménagère</p>
+    </div>
+    <div class="col-md-4 text-md-end">
+      <!-- NOUVEAU : Corrige le lien -->
+      <a href="/annonce/nouvelle" class="btn btn-outline-primary">Nouvelle demande</a>
+    </div>
+  </div>
+
+  @if (chargement()) {
+    <div class="text-center py-5">
+      <div class="spinner-border text-primary" role="status"></div>
+      <p class="mt-2 text-muted">Chargement de votre dossier...</p>
+    </div>
+  }
+
+  @if (messageErreur()) {
+    <div class="alert alert-danger text-center">{{ messageErreur() }}</div>
+  }
+
+  @if (!chargement() && !messageErreur() && demandes().length === 0) {
+    <div class="card shadow-sm text-center py-5">
+      <div class="card-body">
+        <h4>Aucune demande trouvée</h4>
+        <p class="text-muted">Vous n'avez pas encore publié de besoin avec cette adresse e-mail.</p>
+      </div>
+    </div>
+  }
+
+  @if (!chargement() && !messageErreur() && demandes().length > 0) {
+    <div class="row">
+      @for (demande of demandes(); track demande._id) {
+        <div class="col-12 mb-3">
+          <div class="card shadow-sm h-100 border-start border-4"
+               [ngClass]="getBadgeClass(demande.statut)">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <h5 class="card-title mb-0">{{ demande.titre }}</h5>
+                <span class="badge rounded-pill bg-dark text-white">
+                  @if (demande.statut === 'nouvelle') { En attente }
+                  @else if (demande.statut === 'en_traitement') { Prise en charge }
+                  @else if (demande.statut === 'cloturee') { Clôturée }
+                  @else { {{ demande.statut }} }
+                </span>
+              </div>
+              <p class="text-muted small mb-3">{{ demande.localisation }} | Publié le {{ demande.createdAt | date:'dd/MM/yyyy' }}</p>
+              <p class="card-text">{{ demande.description }}</p>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>

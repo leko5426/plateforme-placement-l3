@@ -1,0 +1,23 @@
+<div class="espace-layout">
+  <aside class="espace-sidebar">
+    <div class="espace-sidebar-header">
+      <span class="badge-statut badge-statut--neutre"><i class="bi bi-building"></i> Espace Agent</span>
+      <p class="mb-0 mt-2 fw-semibold">{{ auth.utilisateur()?.nom }}</p>
+    </div>
+    <nav class="nav flex-column espace-nav">
+      @for (l of liens; track l.lien) {
+        <a
+          class="nav-link"
+          [routerLink]="l.lien"
+          routerLinkActive="active"
+        >
+          <i class="bi" [class]="l.icone"></i> {{ l.libelle }}
+        </a>
+      }
+    </nav>
+  </aside>
+
+  <div class="espace-contenu">
+    <router-outlet />
+  </div>
+</div>

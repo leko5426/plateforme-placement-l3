@@ -1,0 +1,310 @@
+// ==========================================================================
+// DESIGN TOKENS — Plateforme Aide-Ménagères
+// Palette ancrée dans le service à domicile : teal profond (confiance/soin),
+// ambre chaud (accueil), fond sable doux. Pas de bleu Bootstrap par défaut.
+// ==========================================================================
+
+:root {
+  // Couleurs de marque
+  --brand-teal-900: #0a3a30;
+  --brand-teal-700: #0f5c4c;
+  --brand-teal-600: #146d5a;
+  --brand-teal-100: #e2efe9;
+  --brand-teal-50: #f0f7f4;
+
+  --brand-amber-600: #d98d1f;
+  --brand-amber-500: #e8a648;
+  --brand-amber-100: #fbeacd;
+
+  --brand-ink: #1e2521;
+  --brand-ink-soft: #4a534e;
+  --brand-sand: #f7f5f0;
+  --brand-sand-dark: #efebe1;
+  --brand-white: #ffffff;
+
+  --brand-danger: #c0483a;
+  --brand-danger-bg: #fbeae7;
+  --brand-success: #1f7a5c;
+  --brand-success-bg: #e5f3ec;
+
+  // Typographie
+  --font-display: 'Sora', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+
+  // Rayons / ombres
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 22px;
+  --shadow-card: 0 2px 8px rgba(30, 37, 33, 0.06), 0 8px 24px rgba(30, 37, 33, 0.05);
+  --shadow-card-hover: 0 4px 14px rgba(30, 37, 33, 0.09), 0 14px 34px rgba(30, 37, 33, 0.08);
+
+  // Overrides Bootstrap
+  --bs-primary: var(--brand-teal-700);
+  --bs-body-font-family: var(--font-body);
+  --bs-body-color: var(--brand-ink);
+  --bs-body-bg: var(--brand-sand);
+  --bs-link-color: var(--brand-teal-700);
+  --bs-link-hover-color: var(--brand-teal-900);
+  --bs-border-radius: var(--radius-sm);
+}
+
+html, body {
+  height: 100%;
+  background: var(--brand-sand);
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--brand-ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6, .display-font {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--brand-ink);
+}
+
+.text-mono { font-family: var(--font-mono); }
+
+// Liseré signature : trois bandes teal / ambre / teal, discret, utilisé
+// sous le hero et en accent supérieur de certaines cartes.
+.brand-rule {
+  height: 4px;
+  width: 72px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--brand-teal-700) 0 40%, var(--brand-amber-500) 40% 60%, var(--brand-teal-700) 60% 100%);
+}
+
+.brand-rule--wide {
+  width: 100%;
+  height: 3px;
+}
+
+// ---- Boutons ----
+.btn {
+  font-family: var(--font-display);
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  padding-inline: 1.25rem;
+}
+
+.btn-primary {
+  background-color: var(--brand-teal-700);
+  border-color: var(--brand-teal-700);
+}
+.btn-primary:hover, .btn-primary:focus {
+  background-color: var(--brand-teal-900);
+  border-color: var(--brand-teal-900);
+}
+
+.btn-outline-primary {
+  color: var(--brand-teal-700);
+  border-color: var(--brand-teal-700);
+}
+.btn-outline-primary:hover {
+  background-color: var(--brand-teal-700);
+  border-color: var(--brand-teal-700);
+}
+
+.btn-accent {
+  background-color: var(--brand-amber-500);
+  border-color: var(--brand-amber-500);
+  color: var(--brand-ink);
+}
+.btn-accent:hover {
+  background-color: var(--brand-amber-600);
+  border-color: var(--brand-amber-600);
+  color: var(--brand-ink);
+}
+
+// ---- Cartes ----
+.card {
+  border: 1px solid var(--brand-sand-dark);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+.card--hoverable:hover {
+  box-shadow: var(--shadow-card-hover);
+  transform: translateY(-2px);
+}
+
+.card--accent-top {
+  border-top: 3px solid var(--brand-teal-700);
+}
+
+// ---- Badges de statut ----
+.badge-statut {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.78rem;
+  padding: 0.35em 0.75em;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+}
+.badge-statut--attente { background: var(--brand-amber-100); color: var(--brand-amber-600); }
+.badge-statut--succes { background: var(--brand-success-bg); color: var(--brand-success); }
+.badge-statut--danger { background: var(--brand-danger-bg); color: var(--brand-danger); }
+.badge-statut--neutre { background: var(--brand-teal-100); color: var(--brand-teal-700); }
+
+// ---- Formulaires ----
+.form-control, .form-select {
+  border-radius: var(--radius-sm);
+  border-color: var(--brand-sand-dark);
+  padding: 0.6rem 0.9rem;
+}
+.form-control:focus, .form-select:focus {
+  border-color: var(--brand-teal-600);
+  box-shadow: 0 0 0 0.2rem rgba(15, 92, 76, 0.15);
+}
+.form-label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--brand-ink-soft);
+}
+
+// ---- Sections ----
+.section {
+  padding-block: 4rem;
+}
+.section-sand-dark {
+  background: var(--brand-sand-dark);
+}
+.section-teal {
+  background: var(--brand-teal-900);
+  color: var(--brand-white);
+}
+.section-teal h1, .section-teal h2, .section-teal h3 { color: var(--brand-white); }
+
+// ---- Accessibilité : focus clavier visible ----
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+  outline: 3px solid var(--brand-amber-500);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+}
+
+// ---- Utilitaires ----
+.avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--brand-teal-100);
+}
+.avatar--lg { width: 96px; height: 96px; }
+
+.cursor-pointer { cursor: pointer; }
+
+// ---- En-tête de section (pages listing) ----
+.section-header {
+  padding-block: 3rem 1rem;
+  background: var(--brand-teal-50);
+  border-bottom: 1px solid var(--brand-sand-dark);
+}
+
+.recherche-barre {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--brand-white);
+  border: 1px solid var(--brand-sand-dark);
+  border-radius: var(--radius-md);
+  padding: 0.6rem 0.75rem;
+  max-width: 640px;
+  box-shadow: var(--shadow-card);
+}
+.recherche-barre i {
+  color: var(--brand-teal-700);
+  font-size: 1.1rem;
+  margin-left: 0.25rem;
+}
+.recherche-barre .form-control {
+  border: none;
+  box-shadow: none;
+  padding-left: 0.25rem;
+}
+.recherche-barre .form-control:focus { box-shadow: none; }
+
+.text-teal { color: var(--brand-teal-700); }
+
+// ---- Pages d'authentification ----
+.auth-section {
+  padding-block: 4rem;
+  min-height: calc(100vh - 300px);
+  background: linear-gradient(180deg, var(--brand-teal-50) 0%, var(--brand-sand) 100%);
+  display: flex;
+  align-items: center;
+}
+.auth-card {
+  border-radius: var(--radius-lg);
+}
+.brand-mark-lg {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  background: var(--brand-teal-700);
+  color: var(--brand-white);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+}
+
+// ---- Layouts des espaces privés (agent / candidate / admin) ----
+.espace-layout {
+  display: flex;
+  min-height: calc(100vh - 250px);
+  background: var(--brand-sand);
+}
+
+.espace-sidebar {
+  width: 260px;
+  flex-shrink: 0;
+  background: var(--brand-white);
+  border-right: 1px solid var(--brand-sand-dark);
+  padding: 1.5rem 1rem;
+}
+
+.espace-sidebar-header {
+  padding: 0.5rem 0.75rem 1.25rem;
+  border-bottom: 1px solid var(--brand-sand-dark);
+  margin-bottom: 1rem;
+}
+
+.espace-nav .nav-link {
+  color: var(--brand-ink-soft);
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  padding: 0.65rem 0.85rem;
+  margin-bottom: 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.espace-nav .nav-link i { font-size: 1.05rem; width: 20px; }
+.espace-nav .nav-link:hover { background: var(--brand-teal-50); color: var(--brand-teal-700); }
+.espace-nav .nav-link.active {
+  background: var(--brand-teal-700);
+  color: var(--brand-white);
+}
+
+.espace-contenu {
+  flex-grow: 1;
+  padding: 2rem;
+  min-width: 0;
+}
+
+@media (max-width: 768px) {
+  .espace-layout { flex-direction: column; }
+  .espace-sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--brand-sand-dark); }
+  .espace-nav { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .espace-contenu { padding: 1.25rem; }
+}

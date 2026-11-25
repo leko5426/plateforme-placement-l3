@@ -1,0 +1,70 @@
+<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+  <div>
+    <h3 class="mb-1">Mes candidates</h3>
+    <p class="text-muted mb-0">Gérez les profils rattachés à votre agence</p>
+  </div>
+  <a routerLink="/agent/candidates/nouvelle" class="btn btn-primary">
+    <i class="bi bi-person-plus me-1"></i>Ajouter une candidate
+  </a>
+</div>
+
+<div class="d-flex flex-wrap gap-2 mb-4">
+  <button class="btn btn-sm" [class.btn-primary]="filtreActif() === ''" [class.btn-outline-primary]="filtreActif() !== ''" (click)="filtrer('')">Toutes</button>
+  <button class="btn btn-sm" [class.btn-primary]="filtreActif() === 'en_attente'" [class.btn-outline-primary]="filtreActif() !== 'en_attente'" (click)="filtrer('en_attente')">En attente</button>
+  <button class="btn btn-sm" [class.btn-primary]="filtreActif() === 'verifiee'" [class.btn-outline-primary]="filtreActif() !== 'verifiee'" (click)="filtrer('verifiee')">Vérifiées</button>
+  <button class="btn btn-sm" [class.btn-primary]="filtreActif() === 'placee'" [class.btn-outline-primary]="filtreActif() !== 'placee'" (click)="filtrer('placee')">Placées</button>
+  <button class="btn btn-sm" [class.btn-primary]="filtreActif() === 'archivee'" [class.btn-outline-primary]="filtreActif() !== 'archivee'" (click)="filtrer('archivee')">Archivées</button>
+</div>
+
+@if (chargement()) {
+  <app-loading-spinner message="Chargement…" />
+} @else if (candidates().length === 0) {
+  <app-empty-state icon="bi-people" titre="Aucune candidate pour l'instant" description="Ajoutez votre première candidate pour commencer." />
+} @else {
+  <div class="table-responsive card">
+    <table class="table align-middle mb-0">
+      <thead>
+        <tr>
+          <th>Candidate</th>
+          <th>Ville</th>
+          <th>Âge</th>
+          <th>Expérience</th>
+          <th>Statut</th>
+          <th class="text-end">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (c of candidates(); track c._id) {
+          <tr>
+            <td>
+              <div class="d-flex align-items-center gap-2">
+                @if (c.photo) {
+                  <img [src]="c.photo" class="avatar" style="width:36px;height:36px;" alt="" />
+                } @else {
+                  <div class="avatar d-flex align-items-center justify-content-center" style="width:36px;height:36px;">
+                    <i class="bi bi-person text-teal"></i>
+                  </div>
+                }
+                <a [routerLink]="['/candidates', c._id]" class="fw-semibold text-decoration-none">{{ nomUtilisateur(c) }}</a>
+              </div>
+            </td>
+            <td>{{ c.ville }}</td>
+            <td>{{ c.age }} ans</td>
+            <td>{{ c.experienceAnnees }} an(s)</td>
+            <td><app-star-badge [statut]="c.statut" /></td>
+            <td class="text-end">
+              <div class="dropdown">
+                <button class="btn btn-sm btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown">Modifier</button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                  <li><button class="dropdown-item" (click)="changerStatut(c, 'verifiee')">Marquer vérifiée</button></li>
+                  <li><button class="dropdown-item" (click)="changerStatut(c, 'placee')">Marquer placée</button></li>
+                  <li><button class="dropdown-item" (click)="changerStatut(c, 'archivee')">Archiver</button></li>
+                </ul>
+              </div>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}

@@ -1,0 +1,268 @@
+@if (chargement()) {
+  <app-loading-spinner message="Chargement du profil…" />
+} @else if (introuvable()) {
+  <div class="container py-5">
+    <app-empty-state
+      icon="bi-person-x"
+      titre="Profil introuvable"
+      description="Cette candidate n'existe plus ou a été archivée."
+    />
+  </div>
+} @else {
+  @if (candidate(); as c) {
+
+    <section class="section-header">
+      <div class="container">
+        <div class="d-flex flex-wrap align-items-center gap-4">
+
+          @if (c.photo) {
+            <img
+              [src]="'http://localhost:5000' + c.photo"
+              class="avatar avatar--lg"
+              alt="Photo de la candidate"
+            />
+          } @else {
+            <div
+              class="avatar avatar--lg d-flex align-items-center justify-content-center"
+            >
+              <i class="bi bi-person text-teal fs-2"></i>
+            </div>
+          }
+
+          <div class="flex-grow-1">
+            <div class="d-flex align-items-center gap-2 flex-wrap">
+
+              <h1 class="mb-0">
+                {{ nomUtilisateur() }} <span class="text-muted fs-4">({{ c.ville }}, {{ c.age }} ans)</span>
+              </h1>
+
+              <app-star-badge [statut]="c.statut" />
+
+            </div>
+
+            <p class="text-muted mb-0 mt-1">
+              {{ c.experienceAnnees }} an(s) d'expérience
+              &middot;
+              Disponibilité : {{ c.disponibilite }}
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <section class="section pt-4">
+      <div class="container">
+        <div class="row g-4">
+
+          <div class="col-lg-8">
+
+            <div class="card mb-4">
+              <div class="card-body p-4">
+
+                <h5>À propos</h5>
+
+                <p class="text-muted mb-0">
+                  {{
+                    c.description || 'Aucune description renseignée.'
+                  }}
+                </p>
+
+              </div>
+            </div>
+
+            @if (c.competences && c.competences.length) {
+              <div class="card">
+                <div class="card-body p-4">
+
+                  <h5>Compétences</h5>
+
+                  <div class="d-flex flex-wrap gap-2 mt-2">
+
+                    @for (comp of c.competences; track comp) {
+                      <span class="badge-statut badge-statut--neutre">
+                        {{ comp }}
+                      </span>
+                    }
+
+                  </div>
+
+                </div>
+              </div>
+            }
+
+          </div>
+
+          <div class="col-lg-4">
+            
+            <!-- BOUTON DE DEMANDE POUR LES CLIENTS -->
+            @if (peutFaireDemande()) {
+              <div class="card mb-4">
+                <div class="card-body p-4 text-center">
+                  
+                  <h6>Ce profil t'intéresse ?</h6>
+                  
+                  <p class="text-muted small mb-3">
+                    Soumets ton besoin pour recruter directement cette candidate.
+                  </p>
+                  
+                  <button class="btn btn-primary w-100" (click)="faireDemande()">
+                    <i class="bi bi-send me-2"></i> Sélectionner ce profil
+                  </button>
+                  
+                </div>
+              </div>
+            }
+            
+            @if (peutContacter()) {
+              <button class="btn btn-primary w-100 mb-3" (click)="contacter()">
+                <i class="bi bi-chat-dots me-2"></i>Contacter cette candidate
+              </button>
+            }
+
+            @if (peutGererStatut()) {
+              <div class="card card--accent-top mb-3">
+                <div class="card-body p-4">
+
+                  <h6>Panneau de contrôle</h6>
+
+                  <div class="d-grid gap-2 mt-3">
+
+                    <button
+                      type="button"
+                      class="btn btn-outline-primary btn-sm"
+                      (click)="changerStatut('verifiee')"
+                    >
+                      Marquer vérifiée
+                    </button>
+
+                    <button
+                      type="button"
+                      class="btn btn-outline-primary btn-sm"
+                      (click)="changerStatut('placee')"
+                    >
+                      Marquer placée
+                    </button>
+
+                    <button
+                      type="button"
+                      class="btn btn-outline-primary btn-sm"
+                      (click)="changerStatut('archivee')"
+                    >
+                      Archiver
+                    </button>
+
+                    @if (c.pieceIdentiteFournie) {
+                      <button class="btn btn-outline-primary btn-sm" (click)="voirPieceIdentite()">
+                        <i class="bi bi-person-vcard me-1"></i>Voir la pièce d'identité
+                      </button>
+                    }
+
+                    <button
+                      type="button"
+                      class="btn btn-accent btn-sm"
+                      (click)="exporterPDF()"
+                    >
+                      <i class="bi bi-file-earmark-pdf me-1"></i>
+                      Exporter en PDF
+                    </button>
+
+                    <hr class="my-3 text-muted" />
+                    <div class="mt-2">
+                      <label class="form-label small text-muted">Ajouter / Mettre à jour la pièce</label>
+                      <input 
+                        type="file" 
+                        class="form-control form-control-sm mb-2" 
+                        accept="image/*,.pdf"
+                        (change)="onFichierSelectionne($event)"
+                      />
+                      <button 
+                        class="btn btn-primary btn-sm w-100" 
+                        [disabled]="!fichierPiece || enTelechargement()"
+                        (click)="uploaderPiece()"
+                      >
+                        @if (enTelechargement()) {
+                          <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+                          Envoi en cours...
+                        } @else {
+                          <i class="bi bi-upload me-1"></i> Envoyer le document
+                        }
+                      </button>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            }
+
+            <!-- BLOC SIGNALEMENT -->
+            <div class="card">
+              <div class="card-body p-4">
+
+                <h6>Un souci avec ce profil ?</h6>
+
+                <p class="text-muted small">
+                  Signale tout contenu inapproprié ou suspect à notre équipe.
+                </p>
+
+                @if (!afficherSignalement()) {
+
+                  <button
+                    type="button"
+                    class="btn btn-outline-primary btn-sm w-100"
+                    (click)="afficherSignalement.set(true)"
+                  >
+                    <i class="bi bi-flag me-1"></i>
+                    Signaler ce profil
+                  </button>
+
+                } @else {
+
+                  <textarea
+                    class="form-control mb-2"
+                    rows="3"
+                    placeholder="Décris le problème…"
+                    [(ngModel)]="motifSignalement"
+                  ></textarea>
+
+                  @if (!auth.estConnecte()) {
+                    <input
+                      type="email"
+                      class="form-control mb-2"
+                      placeholder="Ton email (optionnel)"
+                      [(ngModel)]="emailSignaleur"
+                    />
+                  }
+
+                  <div class="d-flex gap-2">
+
+                    <button
+                      type="button"
+                      class="btn btn-primary btn-sm flex-grow-1"
+                      (click)="envoyerSignalement()"
+                    >
+                      Envoyer
+                    </button>
+
+                    <button
+                      type="button"
+                      class="btn btn-outline-primary btn-sm"
+                      (click)="afficherSignalement.set(false)"
+                    >
+                      Annuler
+                    </button>
+
+                  </div>
+                }
+
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  }
+}

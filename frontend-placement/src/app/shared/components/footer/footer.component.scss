@@ -1,0 +1,40 @@
+.app-footer {
+  background: var(--brand-teal-900);
+  color: var(--brand-white);
+  margin-top: 4rem;
+}
+
+.brand-mark {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: var(--brand-amber-500);
+  color: var(--brand-teal-900);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.brand-name {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: var(--brand-white);
+}
+.text-accent { color: var(--brand-amber-500); }
+
+.footer-title {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--brand-amber-500);
+  margin-bottom: 1rem;
+}
+
+.footer-links li { margin-bottom: 0.5rem; }
+.footer-links a {
+  color: rgba(255, 255, 255, 0.75);
+  text-decoration: none;
+}
+.footer-links a:hover { color: var(--brand-white); }

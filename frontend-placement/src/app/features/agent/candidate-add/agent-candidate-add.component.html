@@ -1,0 +1,83 @@
+<div class="mb-4">
+  <h3 class="mb-1">Ajouter une candidate</h3>
+  <p class="text-muted mb-0">Créez un profil pour une candidate que vous accompagnez.</p>
+</div>
+
+<div class="card" style="max-width: 720px;">
+  <div class="card-body p-4">
+    <form #f="ngForm" (ngSubmit)="soumettre(f)">
+      <div class="text-center mb-4">
+        <label for="photo" class="cursor-pointer">
+          @if (apercuPhoto()) {
+            <img [src]="apercuPhoto()" class="avatar avatar--lg" alt="Aperçu" />
+          } @else {
+            <div class="avatar avatar--lg d-flex align-items-center justify-content-center mx-auto">
+              <i class="bi bi-camera text-teal fs-4"></i>
+            </div>
+          }
+          <p class="small text-muted mt-2 mb-0">Ajouter une photo (optionnel)</p>
+        </label>
+        <input type="file" id="photo" accept="image/*" class="d-none" (change)="surChangementPhoto($event)" />
+      </div>
+
+      <h6 class="mb-3">Informations de connexion</h6>
+      <div class="row g-3 mb-4">
+        <div class="col-md-6">
+          <label class="form-label">Nom complet *</label>
+          <input type="text" class="form-control" name="nom" required [(ngModel)]="modele.nom" />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Téléphone</label>
+          <input type="tel" class="form-control" name="telephone" [(ngModel)]="modele.telephone" />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Email *</label>
+          <input type="email" class="form-control" name="email" required [(ngModel)]="modele.email" />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Mot de passe temporaire *</label>
+          <input type="password" class="form-control" name="password" required minlength="6" [(ngModel)]="modele.password" />
+        </div>
+      </div>
+
+      <h6 class="mb-3">Profil</h6>
+      <div class="row g-3">
+        <div class="col-md-4">
+          <label class="form-label">Ville *</label>
+          <input type="text" class="form-control" name="ville" required [(ngModel)]="modele.ville" />
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Âge *</label>
+          <input type="number" class="form-control" name="age" required min="18" max="70" [(ngModel)]="modele.age" />
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Expérience (années)</label>
+          <input type="number" class="form-control" name="experienceAnnees" min="0" [(ngModel)]="modele.experienceAnnees" />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Disponibilité</label>
+          <select class="form-select" name="disponibilite" [(ngModel)]="modele.disponibilite">
+            <option value="temps_plein">Temps plein</option>
+            <option value="temps_partiel">Temps partiel</option>
+            <option value="ponctuel">Ponctuel</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Compétences (séparées par virgule)</label>
+          <input type="text" class="form-control" name="competencesTexte" [(ngModel)]="modele.competencesTexte" />
+        </div>
+        <div class="col-12">
+          <label class="form-label">Description</label>
+          <textarea class="form-control" name="description" rows="3" [(ngModel)]="modele.description"></textarea>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary mt-4" [disabled]="enEnvoi()">
+        @if (enEnvoi()) {
+          <span class="spinner-border spinner-border-sm me-2"></span>
+        }
+        Ajouter la candidate
+      </button>
+    </form>
+  </div>
+</div>

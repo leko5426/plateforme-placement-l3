@@ -1,0 +1,56 @@
+<div class="mb-4">
+  <h3 class="mb-1">Candidatures reçues (Indépendantes)</h3>
+  <p class="text-muted mb-0">Ces candidates se sont inscrites sur la plateforme sans agence. Vous pouvez les recruter pour les ajouter à votre vivier.</p>
+</div>
+
+@if (chargement()) {
+  <app-loading-spinner message="Recherche des candidates indépendantes..." />
+} @else if (candidatures().length === 0) {
+  <app-empty-state icon="bi-person-badge" titre="Aucune candidature" description="Il n'y a aucune candidate indépendante en attente pour le moment." />
+} @else {
+  <div class="row g-4">
+    @for (fille of candidatures(); track fille._id) {
+      <div class="col-md-6 col-lg-4">
+        <div class="card shadow-sm border-0 h-100 bg-white">
+          <div class="card-body text-center p-4 d-flex flex-column">
+            
+            <div class="mb-3">
+              <img [src]="fille.photo ? apiUrl + fille.photo : 'assets/images/default-avatar.png'" 
+                   class="rounded-circle shadow-sm border border-2 border-white" 
+                   style="width: 100px; height: 100px; object-fit: cover;" 
+                   alt="Photo">
+            </div>
+            
+            <h5 class="fw-bold mb-1 text-dark">{{ fille.user?.nom || 'Candidate' }}</h5>
+            <div class="text-muted small mb-3">
+              <i class="bi bi-geo-alt me-1"></i> {{ fille.ville }} <span class="mx-1">•</span> {{ fille.age }} ans
+            </div>
+
+            <div class="bg-light rounded p-3 text-start small mb-4 flex-grow-1 border-start border-4 border-primary">
+              <div class="mb-2">
+                <span class="text-muted fw-bold d-block">Expérience :</span>
+                <span class="text-dark">{{ fille.experienceAnnees }} an(s)</span>
+              </div>
+              <div>
+                <span class="text-muted fw-bold d-block">Disponibilité :</span>
+                <span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary-subtle mt-1">
+                  {{ fille.disponibilite | titlecase }}
+                </span>
+              </div>
+            </div>
+
+            <div class="d-grid gap-2 mt-auto">
+              <button class="btn btn-primary fw-medium" (click)="recruter(fille)">
+                <i class="bi bi-person-check-fill me-2"></i> Intégrer à mon agence
+              </button>
+              <a [routerLink]="['/candidates', fille._id]" class="btn btn-outline-secondary btn-sm">
+                Voir le profil complet
+              </a>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+}

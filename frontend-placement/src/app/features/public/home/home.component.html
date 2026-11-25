@@ -1,0 +1,91 @@
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-6">
+        <span class="eyebrow"><i class="bi bi-house-heart-fill me-2"></i>Emploi à domicile en Côte d'Ivoire</span>
+        <h1 class="hero-titre mt-3">
+          Trouver la bonne personne pour la maison, <span class="text-accent">sans le hasard.</span>
+        </h1>
+        <div class="brand-rule my-4"></div>
+        <p class="hero-texte">
+          AideMenagere met en relation candidates, agents de placement et employeurs, pour des mises
+          en relation vérifiées et suivies — d'un bout à l'autre du processus.
+        </p>
+        <div class="d-flex flex-wrap gap-3 mt-4">
+          <a routerLink="/candidates" class="btn btn-primary btn-lg">
+            <i class="bi bi-search me-2"></i>Trouver une aide-ménagère
+          </a>
+          <a routerLink="/inscription/candidate" class="btn btn-outline-primary btn-lg">
+            Je cherche un emploi
+          </a>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="hero-carte">
+          <div class="hero-carte-ligne" *ngFor="let etape of etapes">
+            <div class="hero-carte-icone"><i class="bi" [class]="etape.icone"></i></div>
+            <div>
+              <p class="hero-carte-titre">{{ etape.titre }}</p>
+              <p class="hero-carte-texte">{{ etape.texte }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMMENT ÇA MARCHE -->
+<section class="section">
+  <div class="container">
+    <div class="text-center mb-5">
+      <span class="eyebrow eyebrow--dark">Le parcours</span>
+      <h2 class="mt-2">Trois étapes, un accompagnement à chaque instant</h2>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-4" *ngFor="let etape of etapes">
+        <div class="etape-carte h-100">
+          <span class="etape-numero text-mono">{{ etape.numero }}</span>
+          <div class="etape-icone"><i class="bi" [class]="etape.icone"></i></div>
+          <h5>{{ etape.titre }}</h5>
+          <p class="text-muted mb-0">{{ etape.texte }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TROIS PUBLICS -->
+<section class="section section-sand-dark">
+  <div class="container">
+    <div class="text-center mb-5">
+      <span class="eyebrow eyebrow--dark">Qui êtes-vous ?</span>
+      <h2 class="mt-2">Un espace pensé pour chaque rôle</h2>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-4" *ngFor="let p of publics">
+        <div class="card card--hoverable card--accent-top h-100">
+          <div class="card-body p-4 d-flex flex-column">
+            <div class="public-icone mb-3"><i class="bi" [class]="p.icone"></i></div>
+            <h5>{{ p.titre }}</h5>
+            <p class="text-muted flex-grow-1">{{ p.texte }}</p>
+            <a [routerLink]="p.lien" class="btn btn-outline-primary mt-2 align-self-start">{{ p.cta }}</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="section section-teal text-center">
+  <div class="container">
+    <h2>Prêt à démarrer une mise en relation de confiance ?</h2>
+    <p class="text-white-50 col-lg-6 mx-auto">
+      Que vous cherchiez un emploi, gériez une agence de placement, ou recrutiez pour votre foyer,
+      la plateforme s'adapte à votre situation.
+    </p>
+    <a routerLink="/agences" class="btn btn-accent btn-lg mt-2">Voir les agences partenaires</a>
+  </div>
+</section>

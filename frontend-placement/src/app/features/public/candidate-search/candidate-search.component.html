@@ -1,0 +1,106 @@
+<div class="container py-5">
+  <div class="text-center mb-5">
+    <h1 class="display-6 fw-bold">Trouver une candidate</h1>
+    <p class="text-muted">Parcours les profils vérifiés et trouve la personne idéale selon tes critères.</p>
+  </div>
+
+  <div class="card border-0 shadow-sm mb-5">
+    <div class="card-body p-4">
+      <div class="row g-3 align-items-end">
+        <div class="col-md-4">
+          <label class="form-label text-muted small fw-bold">Ville</label>
+          <input type="text" class="form-control" [(ngModel)]="filtres.ville" placeholder="Ex: Abidjan, Cocody..." (keyup.enter)="rechercher()">
+        </div>
+        
+        <div class="col-md-3">
+          <label class="form-label text-muted small fw-bold">Disponibilité</label>
+          <select class="form-select" [(ngModel)]="filtres.disponibilite" (change)="rechercher()">
+            <option value="">Toutes les disponibilités</option>
+            <option value="temps_plein">Temps plein</option>
+            <option value="temps_partiel">Temps partiel</option>
+            <option value="ponctuel">Ponctuel</option>
+          </select>
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label text-muted small fw-bold">Expérience (années min)</label>
+          <input type="number" class="form-control" [(ngModel)]="filtres.experienceMin" placeholder="Ex: 2" (keyup.enter)="rechercher()">
+        </div>
+
+        <div class="col-md-2 d-flex gap-2">
+          <button class="btn btn-primary flex-grow-1" (click)="rechercher()">
+            <i class="bi bi-search"></i>
+          </button>
+          <button class="btn btn-light border" (click)="reinitialiser()" title="Réinitialiser les filtres">
+            <i class="bi bi-arrow-counterclockwise"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  @if (chargement()) {
+    <app-loading-spinner message="Recherche des profils en cours..." />
+  } @else if (candidates().length === 0) {
+    <app-empty-state 
+      icon="bi-search" 
+      titre="Aucun profil trouvé" 
+      description="Modifie tes critères de recherche ou réinitialise les filtres pour voir plus de résultats." 
+    />
+  } @else {
+    <div class="row g-4">
+      @for (c of candidates(); track c._id) {
+        <div class="col-md-6 col-lg-4">
+          <div class="card h-100 border-0 shadow-sm" style="transition: transform 0.2s;">
+            <div class="card-body text-center p-4">
+              
+              @if (c.photo) {
+                <img [src]="'http://localhost:5000' + c.photo" 
+                     class="rounded-circle mb-3 border" 
+                     style="width: 100px; height: 100px; object-fit: cover;" 
+                     alt="Photo">
+              } @else {
+                <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-3 border" 
+                     style="width: 100px; height: 100px;">
+                  <i class="bi bi-person fs-1 text-secondary"></i>
+                </div>
+              }
+              
+              <h5 class="card-title fw-bold mb-1">{{ nomUtilisateur(c) }}</h5>
+              <p class="text-muted small mb-3">
+                <i class="bi bi-geo-alt-fill text-primary me-1"></i> {{ c.ville }} &bull; {{ c.age }} ans
+              </p>
+              
+              <div class="d-flex justify-content-center gap-3 small mb-3">
+                <div>
+                  <span class="fw-bold d-block">{{ c.experienceAnnees }}</span>
+                  <span class="text-muted">Année(s)</span>
+                </div>
+                <div class="border-end"></div>
+                <div>
+                  <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill text-capitalize">
+                    {{ formaterDispo(c.disponibilite) }}
+                  </span>
+                  <span class="text-muted d-block mt-1">Disponibilité</span>
+                </div>
+              </div>
+              
+              <div class="d-flex flex-wrap justify-content-center gap-1 mb-4">
+                @for (comp of c.competences | slice:0:3; track comp) {
+                  <span class="badge bg-light text-dark border">{{ comp }}</span>
+                }
+                @if (c.competences && c.competences.length > 3) {
+                  <span class="badge bg-light text-dark border">+{{ c.competences.length - 3 }}</span>
+                }
+              </div>
+
+              <a [routerLink]="['/candidates', c._id]" class="btn btn-outline-primary btn-sm w-100 rounded-pill">
+                Voir le profil complet
+              </a>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>

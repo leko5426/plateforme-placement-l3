@@ -1,0 +1,58 @@
+<nav class="navbar navbar-expand-lg sticky-top app-navbar">
+  <div class="container">
+    <a class="navbar-brand d-flex align-items-center gap-2" routerLink="/">
+      <span class="brand-mark">
+        <i class="bi bi-house-heart-fill"></i>
+      </span>
+      <span class="brand-name">Aide<span class="text-accent">Menagere</span></span>
+    </a>
+
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navMenu"
+      aria-controls="navMenu"
+      aria-expanded="false"
+      aria-label="Ouvrir la navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-lg-2">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/agences" routerLinkActive="active">Agences</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/candidates" routerLinkActive="active">Trouver une aide-ménagère</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/annonce/nouvelle" routerLinkActive="active">Publier un besoin</a>
+        </li>
+      </ul>
+
+      <div class="d-flex align-items-center gap-2" *ngIf="!auth.estConnecte()">
+        <a class="btn btn-outline-primary btn-sm" routerLink="/connexion">Connexion</a>
+        <a class="btn btn-primary btn-sm" routerLink="/inscription/candidate">Je cherche un emploi</a>
+      </div>
+
+      <div class="dropdown" *ngIf="auth.estConnecte()">
+        <button
+          class="btn btn-sm btn-outline-primary dropdown-toggle d-flex align-items-center gap-2"
+          type="button"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+          <span class="avatar-mini">{{ auth.utilisateur()?.nom?.charAt(0) }}</span>
+          {{ auth.utilisateur()?.nom }}
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+          <li><a class="dropdown-item" [routerLink]="espacePersonnel()"><i class="bi bi-speedometer2 me-2"></i>Mon espace</a></li>
+          <li><hr class="dropdown-divider" /></li>
+          <li><button class="dropdown-item text-danger" (click)="seDeconnecter()"><i class="bi bi-box-arrow-right me-2"></i>Déconnexion</button></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>

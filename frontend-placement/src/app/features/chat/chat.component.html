@@ -1,0 +1,64 @@
+<div class="chat-layout">
+  <!-- Liste des conversations -->
+  <aside class="chat-liste">
+    <div class="chat-liste-header">
+      <h6 class="mb-0">Messages</h6>
+    </div>
+    @if (chargement()) {
+      <app-loading-spinner message="Chargement…" />
+    } @else if (conversations().length === 0) {
+      <app-empty-state icon="bi-chat" titre="Aucune conversation" description="Vos échanges apparaîtront ici." />
+    } @else {
+      @for (conv of conversations(); track conv._id) {
+        <button
+          class="chat-item"
+          [class.active]="conversationActive()?._id === conv._id"
+          (click)="ouvrirConversation(conv)"
+        >
+          <span class="avatar-mini-chat">{{ autreParticipant(conv)?.nom?.charAt(0) }}</span>
+          <span class="chat-item-texte">
+            <span class="chat-item-nom">{{ autreParticipant(conv)?.nom }}</span>
+            <span class="chat-item-dernier">{{ conv.dernierMessage || 'Nouvelle conversation' }}</span>
+          </span>
+        </button>
+      }
+    }
+  </aside>
+
+  <!-- Fil de discussion -->
+  <div class="chat-fil">
+    @if (conversationActive(); as conv) {
+      <div class="chat-fil-header">
+        <span class="avatar-mini-chat">{{ autreParticipant(conv)?.nom?.charAt(0) }}</span>
+        <span class="fw-semibold">{{ autreParticipant(conv)?.nom }}</span>
+        @if (conversationService.enTrainDecrire()) {
+          <span class="text-muted small ms-2">est en train d'écrire…</span>
+        }
+      </div>
+
+      <div class="chat-fil-messages" #zoneMessages>
+        @for (msg of conversationService.messagesConversationCourante(); track msg._id) {
+          <div class="chat-bulle-ligne" [class.chat-bulle-ligne--moi]="estMoi(msg.expediteur._id)">
+            <div class="chat-bulle" [class.chat-bulle--moi]="estMoi(msg.expediteur._id)">
+              {{ msg.contenu }}
+            </div>
+          </div>
+        }
+      </div>
+
+      <form class="chat-fil-saisie" (ngSubmit)="envoyer()">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Écrire un message…"
+          [(ngModel)]="brouillon"
+          name="brouillon"
+          (keyup)="surFrappe()"
+        />
+        <button type="submit" class="btn btn-primary"><i class="bi bi-send-fill"></i></button>
+      </form>
+    } @else {
+      <app-empty-state icon="bi-chat-dots" titre="Sélectionnez une conversation" description="Choisissez un échange dans la liste à gauche." />
+    }
+  </div>
+</div>

@@ -1,0 +1,125 @@
+<div class="container py-4">
+  <div class="mb-4">
+    <h3 class="mb-1">Gestion des Signalements</h3>
+    <p class="text-muted mb-0">Surveillez et modérez les profils signalés par les utilisateurs ou les employeurs.</p>
+  </div>
+
+  <!-- BARRE DE TRI -->
+  <div class="d-flex gap-2 mb-4">
+    <button class="btn btn-sm px-3" 
+            [ngClass]="filtreActif() === 'en_attente' ? 'btn-primary' : 'btn-outline-secondary bg-white'" 
+            (click)="filtrer('en_attente')">En attente</button>
+    <button class="btn btn-sm px-3" 
+            [ngClass]="filtreActif() === 'traite' ? 'btn-success' : 'btn-outline-secondary bg-white'" 
+            (click)="filtrer('traite')">Traités</button>
+    <button class="btn btn-sm px-3" 
+            [ngClass]="filtreActif() === 'rejete' ? 'btn-danger' : 'btn-outline-secondary bg-white'" 
+            (click)="filtrer('rejete')">Rejetés</button>
+    <button class="btn btn-sm px-3" 
+            [ngClass]="filtreActif() === '' ? 'btn-dark' : 'btn-outline-secondary bg-white'" 
+            (click)="filtrer('')">Tous</button>
+  </div>
+
+  @if (chargement()) {
+    <app-loading-spinner message="Chargement des signalements..." />
+  } @else if (signalements().length === 0) {
+    <app-empty-state 
+      icon="bi-shield-check" 
+      titre="Aucun signalement" 
+      description="Tout va bien ! Aucun profil n'a été signalé avec ce statut." 
+    />
+  } @else {
+    <div class="d-flex flex-column gap-3">
+      @for (signalement of signalements(); track signalement._id) {
+        <div class="card shadow-sm border-0 bg-white border-start border-4"
+             [ngClass]="{'border-danger': signalement.statut === 'en_attente', 'border-success': signalement.statut === 'traite', 'border-secondary': signalement.statut === 'rejete'}">
+          <div class="card-body p-4">
+            
+            <!-- EN-TÊTE DU SIGNALEMENT -->
+            <div class="d-flex justify-content-between align-items-start border-bottom pb-3 mb-3">
+              <div>
+                <h5 class="fw-bold mb-1" [ngClass]="{'text-danger': signalement.statut === 'en_attente', 'text-success': signalement.statut === 'traite', 'text-muted': signalement.statut === 'rejete'}">
+                  <i class="bi bi-exclamation-triangle-fill me-2"></i> Signalement
+                </h5>
+                <div class="small text-muted">
+                  Signalé par : <strong>{{ signaleurTexte(signalement) }}</strong>
+                </div>
+              </div>
+              <div class="text-end text-muted small">
+                <span class="badge mb-2" [ngClass]="{
+                  'bg-warning text-dark': signalement.statut === 'en_attente',
+                  'bg-success': signalement.statut === 'traite',
+                  'bg-secondary': signalement.statut === 'rejete'
+                }">{{ signalement.statut | uppercase }}</span>
+                <br>
+                <i class="bi bi-clock me-1"></i> {{ signalement.createdAt | date: 'dd/MM/yyyy HH:mm' }}
+              </div>
+            </div>
+
+            <!-- MOTIF -->
+            <div class="mb-4">
+              <h6 class="small text-uppercase text-muted fw-bold mb-2">Motif du signalement :</h6>
+              <p class="mb-0 text-dark bg-light p-3 rounded">{{ signalement.motif }}</p>
+            </div>
+
+            <!-- PROFILS CONCERNÉS AVEC BOUTONS -->
+            @if (signalement.detailsCible) {
+              <div class="d-flex flex-wrap gap-3 align-items-center bg-light rounded p-3 border border-light-subtle mb-4">
+                
+                <!-- Infos Candidate -->
+                <div class="flex-grow-1">
+                  <div class="text-secondary small fw-bold mb-1">CANDIDATE SIGNALÉE :</div>
+                  <div class="fw-bold text-dark fs-5">{{ signalement.nomCible }}</div>
+                </div>
+
+                <!-- Bouton Profil Candidate -->
+                <div>
+                  <a [routerLink]="['/candidates', signalement.detailsCible._id]" class="btn btn-danger btn-sm px-3 shadow-sm">
+                    <i class="bi bi-person-badge me-1"></i> Voir la candidate
+                  </a>
+                </div>
+
+                <!-- Bouton Profil Agent (s'il y en a un) -->
+                @if (signalement.agentConcerne) {
+                  <div class="border-start ps-3 ms-2">
+                    <div class="text-secondary small fw-bold mb-1">AGENCE RESPONSABLE :</div>
+                    <a [routerLink]="['/agences', signalement.agentConcerne.urlPersonnalisee]" class="btn btn-outline-dark btn-sm px-3">
+                      <i class="bi bi-building me-1"></i> Voir {{ signalement.agentConcerne.nomAgence }}
+                    </a>
+                  </div>
+                }
+                
+              </div>
+            } @else {
+              <div class="alert alert-secondary mb-4">Le profil de cette candidate a été supprimé ou est introuvable.</div>
+            }
+
+            <!-- ACTION ADMIN (Traiter / Rejeter) -->
+            @if (signalement.statut === 'en_attente') {
+              <div class="border-top pt-3">
+                <label class="form-label small text-muted fw-bold">Ajouter un commentaire (interne)</label>
+                <textarea class="form-control mb-3" rows="2" [(ngModel)]="commentaires[signalement._id]" placeholder="Indiquez les actions prises (ex: Utilisatrice bloquée, faux profil supprimé...)"></textarea>
+                <div class="d-flex gap-2 justify-content-end">
+                  <button class="btn btn-outline-danger btn-sm px-3" (click)="traiter(signalement, 'rejete')">
+                    <i class="bi bi-x-circle me-1"></i> Rejeter le signalement
+                  </button>
+                  <button class="btn btn-success btn-sm px-3" (click)="traiter(signalement, 'traite')">
+                    <i class="bi bi-check-circle me-1"></i> Marquer comme traité
+                  </button>
+                </div>
+              </div>
+            } @else {
+              @if (signalement.commentaireAdmin) {
+                <div class="border-top pt-3 mt-3">
+                  <h6 class="small text-uppercase text-muted fw-bold mb-2">Commentaire de l'administration :</h6>
+                  <p class="mb-0 text-muted fst-italic">{{ signalement.commentaireAdmin }}</p>
+                </div>
+              }
+            }
+
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>

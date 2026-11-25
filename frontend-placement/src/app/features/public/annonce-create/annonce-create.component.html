@@ -1,0 +1,119 @@
+<section class="section-header">
+  <div class="container">
+    <span class="eyebrow"><i class="bi bi-house-heart me-2"></i>Espace employeur</span>
+    <h1 class="mt-3">Publier une demande de personnel</h1>
+    <p class="text-muted col-lg-7">
+      Pas besoin de créer de mot de passe : décrivez votre besoin et connectez-vous automatiquement via votre e-mail.
+    </p>
+  </div>
+</section>
+
+<section class="section pt-4">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        @if (envoye()) {
+          <div class="card text-center p-5 shadow-sm border-0">
+            <div class="card-body">
+              <i class="bi bi-envelope-check-fill text-primary mb-3" style="font-size: 3.5rem;"></i>
+              <h3 class="mt-3">Demande envoyée avec succès !</h3>
+              <p class="text-muted fs-5 mt-3">
+                Un e-mail contenant votre <strong>Lien Magique</strong> vient de vous être envoyé à :<br>
+                <strong class="text-dark">{{ modele.emailEmployeur }}</strong>
+              </p>
+              <div class="alert alert-info mt-4 text-start">
+                <i class="bi bi-info-circle-fill me-2"></i>
+                Ce lien est personnel et sécurisé. Cliquez dessus pour accéder directement à votre tableau de bord et suivre l'avancement de votre recherche.
+              </div>
+              <button class="btn btn-outline-primary mt-3 px-4" (click)="retourAccueil()">Retour à l'accueil</button>
+            </div>
+          </div>
+        } @else {
+          <form #f="ngForm" (ngSubmit)="soumettre(f)" class="card shadow-sm border-0">
+            <div class="card-body p-4 p-md-5">
+              
+              @if (agentSlug) {
+                <div class="alert alert-info d-flex align-items-center gap-2">
+                  <i class="bi bi-info-circle"></i>
+                  Cette demande sera adressée directement à l'agence "{{ agentSlug }}".
+                </div>
+              }
+
+              @if (candidateId) {
+                <div class="p-3 mb-4 rounded" style="background: var(--brand-teal-50); border-left: 4px solid #198754;">
+                  <div class="d-flex align-items-center text-success">
+                    <i class="bi bi-person-check-fill fs-4 me-3"></i>
+                    <div>
+                      <h6 class="mb-1 fw-bold">Candidature directe</h6>
+                      <p class="mb-0 small text-dark">Votre proposition de recrutement est liée en priorité au profil que vous avez sélectionné.</p>
+                    </div>
+                  </div>
+                </div>
+              }
+
+              <h5 class="mb-3 fw-bold border-bottom pb-2">Vos coordonnées</h5>
+              <div class="row g-3 mb-5">
+                <div class="col-md-6">
+                  <label class="form-label">Nom complet *</label>
+                  <input type="text" class="form-control bg-light" name="nomEmployeur" required [(ngModel)]="modele.nomEmployeur" />
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Entreprise (optionnel)</label>
+                  <input type="text" class="form-control bg-light" name="entreprise" [(ngModel)]="modele.entreprise" />
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Email *</label>
+                  <input type="email" class="form-control bg-light" name="emailEmployeur" required [(ngModel)]="modele.emailEmployeur" />
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Téléphone</label>
+                  <input type="tel" class="form-control bg-light" name="telephoneEmployeur" [(ngModel)]="modele.telephoneEmployeur" />
+                </div>
+              </div>
+
+              <h5 class="mb-3 fw-bold border-bottom pb-2">Votre besoin</h5>
+              <div class="row g-3">
+                <div class="col-12">
+                  <label class="form-label">Titre de la demande *</label>
+                  <input type="text" class="form-control bg-light" name="titre" required placeholder="ex: Aide-ménagère temps plein, quartier Cocody" [(ngModel)]="modele.titre" />
+                </div>
+                <div class="col-12">
+                  <label class="form-label">Description détaillée *</label>
+                  <textarea class="form-control bg-light" name="description" rows="4" required [(ngModel)]="modele.description"></textarea>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Localisation (Ville / Quartier) *</label>
+                  <input type="text" class="form-control bg-light" name="localisation" required [(ngModel)]="modele.localisation" />
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label">Âge min</label>
+                  <input type="number" class="form-control bg-light" name="ageMin" [(ngModel)]="modele.ageMin" />
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label">Âge max</label>
+                  <input type="number" class="form-control bg-light" name="ageMax" [(ngModel)]="modele.ageMax" />
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label">Exp. (ans)</label>
+                  <input type="number" class="form-control bg-light" name="experienceMin" [(ngModel)]="modele.experienceMin" />
+                </div>
+              </div>
+
+              <div class="mt-5 text-center">
+                <button type="submit" class="btn btn-primary w-100 py-3 fw-bold fs-5" [disabled]="enEnvoi() || f.invalid">
+                  @if (enEnvoi()) {
+                    <span class="spinner-border spinner-border-sm me-2"></span>
+                  }
+                  Validé
+                </button>
+                <p class="text-muted small mt-2 mb-0">
+                  Vous recevrez un lien de confirmation par mail
+                </p>
+              </div>
+            </div>
+          </form>
+        }
+      </div>
+    </div>
+  </div>
+</section>

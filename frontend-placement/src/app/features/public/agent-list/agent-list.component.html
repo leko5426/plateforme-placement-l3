@@ -1,0 +1,60 @@
+<section class="section-header">
+  <div class="container">
+    <span class="eyebrow"><i class="bi bi-building me-2"></i>Agences partenaires</span>
+    <h1 class="mt-3">Trouvez une agence de placement près de chez vous</h1>
+    <p class="text-muted col-lg-7">
+      Chaque agence gère ses propres candidates et vérifie les profils avant mise en relation.
+    </p>
+
+    <div class="recherche-barre mt-4">
+      <i class="bi bi-geo-alt"></i>
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Filtrer par localisation (ex: Cocody, Yopougon...)"
+        [(ngModel)]="localisation"
+        (keyup.enter)="rechercher()"
+      />
+      <button class="btn btn-primary" (click)="rechercher()">Rechercher</button>
+    </div>
+  </div>
+</section>
+
+<section class="section pt-4">
+  <div class="container">
+    @if (chargement()) {
+      <app-loading-spinner message="Chargement des agences…" />
+    } @else if (agents().length === 0) {
+      <app-empty-state
+        icon="bi-building"
+        titre="Aucune agence trouvée"
+        description="Essaie une autre localisation, ou reviens plus tard."
+      />
+    } @else {
+      <div class="row g-4">
+        @for (agent of agents(); track agent._id) {
+          <div class="col-md-6 col-lg-4">
+            <a [routerLink]="['/agences', agent.urlPersonnalisee]" class="card card--hoverable card--accent-top h-100 text-decoration-none">
+              <div class="card-body p-4">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                  @if (agent.logo) {
+                    <img [src]="agent.logo" class="avatar" alt="" />
+                  } @else {
+                    <div class="avatar d-flex align-items-center justify-content-center">
+                      <i class="bi bi-building text-teal"></i>
+                    </div>
+                  }
+                  <div>
+                    <h5 class="mb-0">{{ agent.nomAgence }}</h5>
+                    <p class="text-muted small mb-0"><i class="bi bi-geo-alt me-1"></i>{{ agent.localisation }}</p>
+                  </div>
+                </div>
+                <p class="text-muted mb-0">{{ agent.description || 'Agence de placement partenaire.' }}</p>
+              </div>
+            </a>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</section>

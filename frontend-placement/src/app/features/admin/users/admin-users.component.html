@@ -1,0 +1,58 @@
+<div class="mb-4">
+  <h3 class="mb-1">Utilisateurs</h3>
+  <p class="text-muted mb-0">Activez ou désactivez n'importe quel compte de la plateforme.</p>
+</div>
+
+<div class="d-flex flex-wrap gap-2 mb-4">
+  <button class="btn btn-sm" [class.btn-primary]="filtreRole() === ''" [class.btn-outline-primary]="filtreRole() !== ''" (click)="filtrer('')">Tous</button>
+  <button class="btn btn-sm" [class.btn-primary]="filtreRole() === 'agent'" [class.btn-outline-primary]="filtreRole() !== 'agent'" (click)="filtrer('agent')">Agents</button>
+  <button class="btn btn-sm" [class.btn-primary]="filtreRole() === 'candidate'" [class.btn-outline-primary]="filtreRole() !== 'candidate'" (click)="filtrer('candidate')">Candidates</button>
+  <button class="btn btn-sm" [class.btn-primary]="filtreRole() === 'employeur'" [class.btn-outline-primary]="filtreRole() !== 'employeur'" (click)="filtrer('employeur')">Employeurs</button>
+  <button class="btn btn-sm" [class.btn-primary]="filtreRole() === 'admin'" [class.btn-outline-primary]="filtreRole() !== 'admin'" (click)="filtrer('admin')">Admins</button>
+</div>
+
+@if (chargement()) {
+  <app-loading-spinner message="Chargement…" />
+} @else if (users().length === 0) {
+  <app-empty-state icon="bi-people" titre="Aucun utilisateur trouvé" description="Essaie un autre filtre." />
+} @else {
+  <div class="table-responsive card">
+    <table class="table align-middle mb-0">
+      <thead>
+        <tr>
+          <th>Nom</th>
+          <th>Email</th>
+          <th>Rôle</th>
+          <th>Statut</th>
+          <th class="text-end">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (u of users(); track u._id) {
+          <tr>
+            <td class="fw-semibold">{{ u.nom }}</td>
+            <td>{{ u.email }}</td>
+            <td><span class="badge-statut badge-statut--neutre">{{ u.role }}</span></td>
+            <td>
+              @if (u.actif) {
+                <span class="badge-statut badge-statut--succes">Actif</span>
+              } @else {
+                <span class="badge-statut badge-statut--danger">Désactivé</span>
+              }
+            </td>
+            <td class="text-end">
+              <button
+                class="btn btn-sm"
+                [class.btn-outline-primary]="u.actif"
+                [class.btn-accent]="!u.actif"
+                (click)="basculerStatut(u)"
+              >
+                {{ u.actif ? 'Désactiver' : 'Réactiver' }}
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}

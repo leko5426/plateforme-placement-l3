@@ -1,0 +1,71 @@
+@if (chargement()) {
+  <app-loading-spinner message="Chargement de votre profil…" />
+} @else {
+  <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+    <div>
+      <h3 class="mb-1">Mon profil</h3>
+      <p class="text-muted mb-0">Tenez votre profil à jour pour maximiser vos chances.</p>
+    </div>
+    @if (profil?.statut) {
+      <app-star-badge [statut]="profil!.statut" />
+    }
+  </div>
+
+  <div class="card" style="max-width: 640px;">
+    <div class="card-body p-4">
+      <form #f="ngForm" (ngSubmit)="soumettre(f)">
+        <div class="text-center mb-4">
+          <label for="photo" class="cursor-pointer">
+            @if (apercuPhoto()) {
+              <img [src]="apercuPhoto()" class="avatar avatar--lg" alt="Aperçu" />
+            } @else {
+              <div class="avatar avatar--lg d-flex align-items-center justify-content-center mx-auto">
+                <i class="bi bi-camera text-teal fs-4"></i>
+              </div>
+            }
+            <p class="small text-muted mt-2 mb-0">Changer la photo</p>
+          </label>
+          <input type="file" id="photo" accept="image/*" class="d-none" (change)="surChangementPhoto($event)" />
+        </div>
+
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label class="form-label">Ville *</label>
+            <input type="text" class="form-control" name="ville" required [(ngModel)]="modele.ville" />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Âge *</label>
+            <input type="number" class="form-control" name="age" required min="18" max="70" [(ngModel)]="modele.age" />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Expérience (années)</label>
+            <input type="number" class="form-control" name="experienceAnnees" min="0" [(ngModel)]="modele.experienceAnnees" />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Disponibilité</label>
+            <select class="form-select" name="disponibilite" [(ngModel)]="modele.disponibilite">
+              <option value="temps_plein">Temps plein</option>
+              <option value="temps_partiel">Temps partiel</option>
+              <option value="ponctuel">Ponctuel</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Compétences (séparées par virgule)</label>
+            <input type="text" class="form-control" name="competencesTexte" [(ngModel)]="modele.competencesTexte" />
+          </div>
+          <div class="col-12">
+            <label class="form-label">Parlez un peu de vous</label>
+            <textarea class="form-control" name="description" rows="4" [(ngModel)]="modele.description"></textarea>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-4" [disabled]="enEnvoi()">
+          @if (enEnvoi()) {
+            <span class="spinner-border spinner-border-sm me-2"></span>
+          }
+          Enregistrer les modifications
+        </button>
+      </form>
+    </div>
+  </div>
+}

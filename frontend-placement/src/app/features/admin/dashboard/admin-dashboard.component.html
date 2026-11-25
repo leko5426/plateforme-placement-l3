@@ -1,0 +1,96 @@
+@if (chargement()) {
+  <app-loading-spinner message="Chargement des statistiques…" />
+} @else {
+  @if (stats(); as s) {
+    <div class="mb-4">
+      <h3 class="mb-1">Tableau de bord</h3>
+      <p class="text-muted mb-0">Vue d'ensemble de la plateforme</p>
+    </div>
+
+    <div class="row g-3 mb-4">
+      <div class="col-sm-6 col-lg-3">
+        <app-stat-card
+          icon="bi-building"
+          [valeur]="s.nombreAgents"
+          label="Agences validées"
+        />
+      </div>
+
+      <div class="col-sm-6 col-lg-3">
+        <app-stat-card
+          icon="bi-hourglass-split"
+          [valeur]="s.nombreAgentsEnAttente"
+          label="Agences en attente"
+        />
+      </div>
+
+      <div class="col-sm-6 col-lg-3">
+        <app-stat-card
+          icon="bi-people"
+          [valeur]="s.nombreCandidates"
+          label="Candidates inscrites"
+        />
+      </div>
+
+      <div class="col-sm-6 col-lg-3">
+        <app-stat-card
+          icon="bi-megaphone"
+          [valeur]="s.nombreAnnonces"
+          label="Annonces publiées"
+        />
+      </div>
+    </div>
+
+    <div class="row g-3">
+      <div class="col-lg-6">
+        <div class="card h-100">
+          <div class="card-body p-4">
+            <h6 class="mb-3">Candidates par statut</h6>
+
+            <div class="d-flex flex-wrap gap-2">
+              <span class="badge-statut badge-statut--attente">
+                En attente : {{ totalCandidatesParStatut('en_attente') }}
+              </span>
+
+              <span class="badge-statut badge-statut--succes">
+                Vérifiées : {{ totalCandidatesParStatut('verifiee') }}
+              </span>
+
+              <span class="badge-statut badge-statut--succes">
+                Placées : {{ totalCandidatesParStatut('placee') }}
+              </span>
+
+              <span class="badge-statut badge-statut--neutre">
+                Archivées : {{ totalCandidatesParStatut('archivee') }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <div class="card h-100">
+          <div class="card-body p-4">
+            <h6 class="mb-3">
+              Visites par catégorie ({{ s.totalVisites }} au total)
+            </h6>
+
+            <div class="d-flex flex-wrap gap-2">
+              <span class="badge-statut badge-statut--neutre">
+                Agences : {{ totalVisitesParCategorie('agent') }}
+              </span>
+
+              <span class="badge-statut badge-statut--neutre">
+                Candidates : {{ totalVisitesParCategorie('candidate') }}
+              </span>
+
+              <span class="badge-statut badge-statut--neutre">
+                Annonces : {{ totalVisitesParCategorie('annonce') }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+}
