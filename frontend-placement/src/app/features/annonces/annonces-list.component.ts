@@ -1,3 +1,4 @@
+import { environment } from '../../../environments/environment';
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -24,7 +25,7 @@ export class AnnoncesListComponent implements OnInit {
   filtreActif = signal('nouvelle');
   enCours = signal<string | null>(null);
 
-  apiUrl = 'http://localhost:5000';
+  apiUrl = environment.socketUrl;
 
   constructor(
     private annonceService: AnnonceService,

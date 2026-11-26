@@ -1,3 +1,4 @@
+import { environment } from '../../../../environments/environment';
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -17,7 +18,7 @@ import { EmptyStateComponent } from '../../../shared/components/empty-state/empt
 export class AgentCandidaturesListComponent implements OnInit {
   candidatures = signal<any[]>([]);
   chargement = signal(true);
-  apiUrl = 'http://localhost:4000'; 
+  apiUrl = environment.socketUrl; 
 
   constructor(
     private candidatureService: CandidatureService,

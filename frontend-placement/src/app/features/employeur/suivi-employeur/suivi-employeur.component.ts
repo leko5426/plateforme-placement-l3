@@ -1,3 +1,4 @@
+import { environment } from '../../../../environments/environment';
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -38,7 +39,7 @@ export class SuiviEmployeurComponent implements OnInit {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     
     // NOUVEAU : On interroge l'API des annonces, pas des demandes
-    this.http.get<any[]>('http://localhost:5000/api/annonces/mes-annonces', { headers }).subscribe({
+    this.http.get<any[]>(`/annonces/mes-annonces`, { headers }).subscribe({
       next: (data) => {
         this.demandes.set(data);
         this.chargement.set(false);

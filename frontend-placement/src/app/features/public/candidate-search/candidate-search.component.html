@@ -55,7 +55,7 @@
             <div class="card-body text-center p-4">
               
               @if (c.photo) {
-                <img [src]="'http://localhost:5000' + c.photo" 
+                <img [src]="baseUrl + c.photo"
                      class="rounded-circle mb-3 border" 
                      style="width: 100px; height: 100px; object-fit: cover;" 
                      alt="Photo">

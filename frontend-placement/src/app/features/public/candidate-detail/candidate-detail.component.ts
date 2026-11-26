@@ -1,3 +1,4 @@
+import { environment } from '../../../../environments/environment';
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -26,6 +27,7 @@ import { StarBadgeComponent } from '../../../shared/components/star-badge/star-b
   styleUrl: './candidate-detail.component.scss'
 })
 export class CandidateDetailComponent implements OnInit {
+  baseUrl = environment.socketUrl;
   candidate = signal<CandidateProfile | null>(null);
   chargement = signal(true);
   introuvable = signal(false);

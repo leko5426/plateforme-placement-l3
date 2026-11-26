@@ -17,7 +17,7 @@
 
           @if (c.photo) {
             <img
-              [src]="'http://localhost:5000' + c.photo"
+              [src]="baseUrl + c.photo"
               class="avatar avatar--lg"
               alt="Photo de la candidate"
             />

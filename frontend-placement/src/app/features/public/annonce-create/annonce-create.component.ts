@@ -1,3 +1,4 @@
+import { environment } from '../../../../environments/environment';
 import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
@@ -68,7 +69,7 @@ export class AnnonceCreateComponent {
     };
 
     // Modification de la route : on pointe vers /api/annonces
-    this.http.post('http://localhost:5000/api/annonces', payload).subscribe({
+    this.http.post(`/annonces`, payload).subscribe({
       next: () => {
         this.envoye.set(true);
         this.enEnvoi.set(false);

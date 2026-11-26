@@ -1,3 +1,4 @@
+import { environment } from '../../../../environments/environment';
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -15,6 +16,7 @@ import { EmptyStateComponent } from '../../../shared/components/empty-state/empt
   styleUrl: './candidate-search.component.scss'
 })
 export class CandidateSearchComponent implements OnInit {
+  baseUrl = environment.socketUrl;
   candidates = signal<CandidateProfile[]>([]);
   chargement = signal(true);
 
